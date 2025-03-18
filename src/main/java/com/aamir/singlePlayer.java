@@ -10,7 +10,7 @@ public class singlePlayer extends abstractGame {
 
     public void updateProgress(){
         storyCompleted++;
-        System.out.println("You have completed " + storyCompleted + "%" + " of the Campaign of " + title);
+        System.out.println("You have completed " + storyCompleted + "%" + " of the Campaign for " + title);
 
 
     }
