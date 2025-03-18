@@ -23,6 +23,8 @@ public abstract class abstractGame implements playable {
         return title;
     }
 
+    public abstract void updateProgress();
+
     
 }
 
