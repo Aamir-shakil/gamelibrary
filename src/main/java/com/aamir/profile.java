@@ -15,9 +15,28 @@ public class profile {
     }
 
 
-
+    //Adding a game to the users library
     public void addGame(abstractGame game){
         games.add(game);
+    }
+
+
+    //Searching for gamne in users library
+    public List<abstractGame> searchGame(String keyword){
+        List<abstractGame> result = new ArrayList<abstractGame>();
+        for(abstractGame game : games){
+            if (game.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
+                result.add(game);
+            }
+        }
+        
+        return result;
+
+
+
+
+
+
     }
     
 }
