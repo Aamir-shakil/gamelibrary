@@ -1,6 +1,8 @@
-package com.aamir;
+package com.aamir.models;
 
 import java.util.List;
+
+import com.aamir.abstractGame;
 
 //Testing to see if the singlePlayer class works
 public class testGame {

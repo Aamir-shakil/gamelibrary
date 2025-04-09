@@ -1,5 +1,6 @@
 package com.aamir;
 
+import com.aamir.models.playable;
 
 //Common attributes and methods for all games in library
 public abstract class abstractGame implements playable {

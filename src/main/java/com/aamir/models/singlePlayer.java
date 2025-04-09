@@ -1,5 +1,7 @@
-package com.aamir;
+package com.aamir.models;
 import java.util.Scanner;
+
+import com.aamir.abstractGame;
 
 public class singlePlayer extends abstractGame {
     private int storyCompleted = 0;

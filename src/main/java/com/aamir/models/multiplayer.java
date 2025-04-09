@@ -1,5 +1,7 @@
-package com.aamir;
+package com.aamir.models;
 import java.util.Scanner;
+
+import com.aamir.abstractGame;
 
 public class multiplayer extends abstractGame {
     private int wins = 0;
