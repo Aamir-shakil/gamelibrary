@@ -22,6 +22,14 @@ public class profile {
     public void addGame(abstractGame game){
         games.add(game);
     }
+    
+    public String getUsername() {
+        return username;
+    }
+
+    public String getUserPlatform() {
+        return userPlatform;
+    }
 
 
     //Searching for gamne in users library

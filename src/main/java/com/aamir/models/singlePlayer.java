@@ -1,5 +1,4 @@
 package com.aamir.models;
-import java.util.Scanner;
 
 import com.aamir.abstractGame;
 
@@ -11,6 +10,10 @@ public class singlePlayer extends abstractGame {
         super(title, genre, platform, releaseYear, developer);
     }
      // New method to accept progress from GUI
+
+     @Override
+     public void updateProgress(){}
+
      public void updateProgress(int progress) {
         if (progress >= 0 && progress <= 100) {
             this.storyCompleted = progress;

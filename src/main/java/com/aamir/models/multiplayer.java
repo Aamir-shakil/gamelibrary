@@ -1,5 +1,4 @@
 package com.aamir.models;
-import java.util.Scanner;
 
 import com.aamir.abstractGame;
 
@@ -11,6 +10,11 @@ public class multiplayer extends abstractGame {
         //inheritance- inheriting attributes from parent abstract class
         super(title, genre, platform, releaseYear, developer);
     }
+
+
+    @Override
+    public void updateProgress() {}
+
     public void updateProgress(int wins, int losses) {
         this.wins = wins;
         this.losses = losses;

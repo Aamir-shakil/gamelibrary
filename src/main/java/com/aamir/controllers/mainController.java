@@ -16,6 +16,9 @@ public class mainController {
     @FXML private TextField developerField;
     @FXML private ChoiceBox<String> gameTypeChoice;
     @FXML private TableView<abstractGame> gameTableView;
+    @FXML private TextField progressField; 
+    @FXML private TextField winsField;     
+    @FXML private TextField lossesField;   
 
     private profile currentUser = new profile("Player1", "PC");
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
@@ -34,7 +37,7 @@ public class mainController {
 
     @FXML
     private void handleAddGame() {
-        try {
+        
             String title = titleField.getText();
             String genre = genreField.getText();
             String platform = platformField.getText();
@@ -42,32 +45,32 @@ public class mainController {
             String developer = developerField.getText();
             String type = gameTypeChoice.getValue();
 
-            if (type == null || type.isEmpty()) {
-                showAlert("Error", "Please select a game type.");
-                return;
-            }
+            abstractGame game = null;
 
-            abstractGame game;
             if ("SinglePlayer".equals(type)) {
                 game = new singlePlayer(title, genre, platform, year, developer);
+                try {
+                    int progress = Integer.parseInt(progressField.getText());
+                    ((singlePlayer) game).updateProgress(progress);  // Call overloaded method
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid story progress. Please enter a number.");
+                }
             } else if ("Multiplayer".equals(type)) {
                 game = new multiplayer(title, genre, platform, year, developer);
-            } else {
-                showAlert("Error", "Unsupported game type.");
-                return;
+                try {
+                    int wins = Integer.parseInt(winsField.getText());
+                    int losses = Integer.parseInt(lossesField.getText());
+                    ((multiplayer) game).updateProgress(wins, losses);  // Call overloaded method
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid wins/losses. Please enter valid numbers.");
+                }
             }
-
-            currentUser.addGame(game);
-            gameList.add(game); // Update the TableView
-            clearFields();
-
-            System.out.println("Game added: " + game.getTitle());
-        } catch (NumberFormatException e) {
-            showAlert("Invalid Input", "Please enter a valid year.");
-        } catch (Exception e) {
-            showAlert("Error", "Something went wrong: " + e.getMessage());
+        
+            if (game != null) {
+                currentUser.addGame(game);
+                System.out.println("Game added: " + game.getTitle());
+            }
         }
-    }
 
             private void clearFields() {
                 titleField.clear();
