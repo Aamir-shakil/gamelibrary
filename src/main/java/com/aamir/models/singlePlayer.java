@@ -10,22 +10,13 @@ public class singlePlayer extends abstractGame {
         //inheritance- inheriting attributes from parent abstract class
         super(title, genre, platform, releaseYear, developer);
     }
-    @Override
-    public void updateProgress(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the percentage of the story you have completed for " + title);
-        int newprogress = scanner.nextInt();
-        if(storyCompleted <= 100 && storyCompleted >= 0){
-            storyCompleted = newprogress;
-            System.out.println("You have completed " + storyCompleted + "%" + " of the Campaign for " + title);
-        }else{
-            System.out.println("Invalid input. Please enter a whole number between 0 and 100");
+     // New method to accept progress from GUI
+     public void updateProgress(int progress) {
+        if (progress >= 0 && progress <= 100) {
+            this.storyCompleted = progress;
+            System.out.println("You have completed " + storyCompleted + "% of the Campaign for " + title);
+        } else {
+            System.out.println("Invalid input. Please enter a number between 0 and 100.");
         }
-        
-        
-
-
     }
-
-    
 }
