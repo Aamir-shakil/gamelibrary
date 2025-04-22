@@ -1,83 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aamir.controllers.mainController">
-   <top>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aamir's Game Library" BorderPane.alignment="CENTER" />
-   </top>
-   <center>
-      <TableView fx:id="gameTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Title" />
-          <TableColumn prefWidth="84.0" text="Genre" />
-            <TableColumn prefWidth="74.0" text="Platform" />
-            <TableColumn text="Developer" />
-            <TableColumn prefWidth="86.0" text="Release Year" />
-        </columns>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </TableView>
-   </center>
-   <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label prefHeight="17.0" prefWidth="100.0" text="     Add Game">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="titleField" text="Title" />
-            <TextField fx:id="genreField" text="Genre" />
-            <TextField fx:id="platformField" text="Platform" />
-            <TextField fx:id="developerField" text="Developer" />
-            <TextField fx:id="yearField" text="Release Year" />
-            <ChoiceBox fx:id="gameTypeChoice" prefWidth="150.0" />
-         </children>
-      </VBox>
-   </right>
-   <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label prefHeight="17.0" prefWidth="100.0" text="   Search Library" />
-            <TextField fx:id="searchField" text="Search input" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Search">
-               <VBox.margin>
-                  <Insets left="19.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </left>
-   <bottom>
-      <VBox prefHeight="58.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label prefHeight="17.0" prefWidth="600.0" text="Progress Tracker">
-               <padding>
-                  <Insets left="250.0" />
-               </padding>
-            </Label>
-            <TextField fx:id="progressField" text="Progres Input(like % story completed)">
-               <padding>
-                  <Insets left="195.0" />
-               </padding>
-            </TextField>
-            <Button fx:id="updateButton" mnemonicParsing="false" text="Update Progress">
-               <VBox.margin>
-                  <Insets left="240.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </bottom>
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.aamir.controllers.mainController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <Text text="Aamir's Game Library" BorderPane.alignment="CENTER" />
+    </top>
+
+    <center>
+        <TableView fx:id="gameTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+                <TableColumn fx:id="genreColumn" prefWidth="84.0" text="Genre" />
+                <TableColumn fx:id="platformColumn" prefWidth="74.0" text="Platform" />
+                <TableColumn fx:id="developerColumn" text="Developer" />
+                <TableColumn fx:id="yearColumn" prefWidth="86.0" text="Release Year" />
+            </columns>
+            <BorderPane.margin>
+                <Insets top="10.0" bottom="10.0" />
+            </BorderPane.margin>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="5.0" alignment="TOP_LEFT" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Add Game" />
+                <TextField fx:id="titleField" promptText="Title" />
+                <TextField fx:id="genreField" promptText="Genre" />
+                <TextField fx:id="platformField" promptText="Platform" />
+                <TextField fx:id="developerField" promptText="Developer" />
+                <TextField fx:id="yearField" promptText="Release Year" />
+                <ChoiceBox fx:id="gameTypeChoice" prefWidth="150.0" />
+                <TextField fx:id="progressField" promptText="Progress (SP)" />
+                <TextField fx:id="winsField" promptText="Wins (MP)" />
+                <TextField fx:id="lossesField" promptText="Losses (MP)" />
+                <Button text="Add Game" onAction="#handleAddGame" />
+            </children>
+            <padding>
+                <Insets top="10.0" right="10.0" />
+            </padding>
+        </VBox>
+    </right>
+
+    <left>
+        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Search Library" />
+                <TextField fx:id="searchField" promptText="Search input" />
+                <Button text="Search" />
+            </children>
+            <padding>
+                <Insets left="10.0" />
+            </padding>
+        </VBox>
+    </left>
+
+    <bottom>
+        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Progress Tracker" />
+                <TextField fx:id="progressField" promptText="Progress input (SP)" />
+                <Button fx:id="updateButton" text="Update Progress" />
+            </children>
+            <padding>
+                <Insets bottom="10.0" />
+            </padding>
+        </VBox>
+    </bottom>
 </BorderPane>

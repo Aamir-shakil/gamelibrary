@@ -4,88 +4,104 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import com.aamir.abstractGame;
 import com.aamir.models.*;
 
 public class mainController {
+
     @FXML private TextField titleField;
     @FXML private TextField genreField;
     @FXML private TextField platformField;
-    @FXML private TextField yearField;
     @FXML private TextField developerField;
+    @FXML private TextField yearField;
     @FXML private ChoiceBox<String> gameTypeChoice;
+    @FXML private TextField progressField;
+    @FXML private TextField winsField;
+    @FXML private TextField lossesField;
     @FXML private TableView<abstractGame> gameTableView;
-    @FXML private TextField progressField; 
-    @FXML private TextField winsField;     
-    @FXML private TextField lossesField;   
+    @FXML private TableColumn<abstractGame, String> titleColumn;
+    @FXML private TableColumn<abstractGame, String> genreColumn;
+    @FXML private TableColumn<abstractGame, String> platformColumn;
+    @FXML private TableColumn<abstractGame, String> developerColumn;
+    @FXML private TableColumn<abstractGame, Integer> yearColumn;
 
-    private profile currentUser = new profile("Player1", "PC");
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Populate choice box
+        // Populate ChoiceBox
         gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
-        
-        // Bind TableView
+
+        // Bind TableView columns
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
+        developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+
         gameTableView.setItems(gameList);
     }
 
-
-
-
     @FXML
     private void handleAddGame() {
-        
+        try {
             String title = titleField.getText();
             String genre = genreField.getText();
             String platform = platformField.getText();
-            int year = Integer.parseInt(yearField.getText());
             String developer = developerField.getText();
+            String yearText = yearField.getText();
             String type = gameTypeChoice.getValue();
 
+            if (title.isEmpty() || genre.isEmpty() || platform.isEmpty() || developer.isEmpty() || yearText.isEmpty() || type == null) {
+                showAlert("Input Error", "Please check all fields and try again.");
+                return;
+            }
+
+            int year = Integer.parseInt(yearText);
             abstractGame game = null;
 
-            if ("SinglePlayer".equals(type)) {
-                game = new singlePlayer(title, genre, platform, year, developer);
-                try {
-                    int progress = Integer.parseInt(progressField.getText());
-                    ((singlePlayer) game).updateProgress(progress);  // Call overloaded method
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid story progress. Please enter a number.");
-                }
-            } else if ("Multiplayer".equals(type)) {
-                game = new multiplayer(title, genre, platform, year, developer);
-                try {
-                    int wins = Integer.parseInt(winsField.getText());
-                    int losses = Integer.parseInt(lossesField.getText());
-                    ((multiplayer) game).updateProgress(wins, losses);  // Call overloaded method
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid wins/losses. Please enter valid numbers.");
-                }
+            if (type.equals("SinglePlayer")) {
+                int progress = Integer.parseInt(progressField.getText());
+                singlePlayer spGame = new singlePlayer(title, genre, platform, year, developer);
+                spGame.updateProgress(progress);
+                game = spGame;
+            } else if (type.equals("Multiplayer")) {
+                int wins = Integer.parseInt(winsField.getText());
+                int losses = Integer.parseInt(lossesField.getText());
+                multiplayer mpGame = new multiplayer(title, genre, platform, year, developer);
+                mpGame.updateProgress(wins, losses);
+                game = mpGame;
             }
-        
-            if (game != null) {
-                currentUser.addGame(game);
-                System.out.println("Game added: " + game.getTitle());
-            }
-        }
 
-            private void clearFields() {
-                titleField.clear();
-                genreField.clear();
-                platformField.clear();
-                yearField.clear();
-                developerField.clear();
-                gameTypeChoice.setValue(null);
+            if (game != null) {
+                gameList.add(game);
+                clearFields();
             }
-        
-            private void showAlert(String title, String message) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle(title);
-                alert.setHeaderText(null);
-                alert.setContentText(message);
-                alert.showAndWait();
-            }
+
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Input", "Please enter valid numbers in numeric fields.");
         }
+    }
+
+    private void clearFields() {
+        titleField.clear();
+        genreField.clear();
+        platformField.clear();
+        developerField.clear();
+        yearField.clear();
+        progressField.clear();
+        winsField.clear();
+        lossesField.clear();
+        gameTypeChoice.setValue(null);
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}
