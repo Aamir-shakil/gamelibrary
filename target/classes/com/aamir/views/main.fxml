@@ -74,4 +74,22 @@
             </padding>
         </VBox>
     </bottom>
+    <bottom>
+    <VBox spacing="5.0" BorderPane.alignment="CENTER">
+        <children>
+            <Label text="Progress Tracker" />
+            <TextField fx:id="progressField" promptText="Progress input (SP)" />
+            <Button fx:id="updateButton" text="Update Progress" />
+
+            <!-- NEW: Review Section -->
+            <Label text="Rate and Review Game" />
+            <ChoiceBox fx:id="ratingChoice" prefWidth="150.0" />
+            <TextArea fx:id="reviewArea" promptText="Write your review here..." prefRowCount="3" prefWidth="400" />
+            <Button fx:id="submitReviewButton" text="Submit Review" onAction="#handleSubmitReview" />
+        </children>
+        <padding>
+            <Insets bottom="10.0" />
+        </padding>
+    </VBox>
+</bottom>
 </BorderPane>

@@ -27,14 +27,20 @@ public class mainController {
     @FXML private TableColumn<abstractGame, String> developerColumn;
     @FXML private TableColumn<abstractGame, Integer> yearColumn;
 
+    // NEW: For review system
+    @FXML private ChoiceBox<Integer> ratingChoice;
+    @FXML private TextArea reviewArea;
+
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
+
+    // NEW: Add a user profile
+    private profile currentUser = new profile("Player1", "PC");
 
     @FXML
     public void initialize() {
-        // Populate ChoiceBox
         gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
+        ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
 
-        // Bind TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
@@ -77,12 +83,37 @@ public class mainController {
 
             if (game != null) {
                 gameList.add(game);
+                currentUser.addGame(game); // Add to user's library
                 clearFields();
+                showAlert("Success", "Game added successfully.");
             }
 
         } catch (NumberFormatException e) {
             showAlert("Invalid Input", "Please enter valid numbers in numeric fields.");
         }
+    }
+
+    @FXML
+    private void handleSubmitReview() {
+        abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedGame == null) {
+            showAlert("No Selection", "Please select a game to review.");
+            return;
+        }
+
+        Integer rating = ratingChoice.getValue();
+        String reviewText = reviewArea.getText();
+
+        if (rating == null || reviewText == null || reviewText.trim().isEmpty()) {
+            showAlert("Incomplete Review", "Please provide both a rating and a review.");
+            return;
+        }
+
+        currentUser.reviewGame(selectedGame, reviewText.trim(), rating);
+        showAlert("Success", "Review submitted for: " + selectedGame.getTitle());
+        ratingChoice.setValue(null);
+        reviewArea.clear();
     }
 
     private void clearFields() {
@@ -98,7 +129,7 @@ public class mainController {
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
