@@ -5,36 +5,58 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.aamir.controllers.mainController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="600.0" prefWidth="800.0">
 
+    <!-- TOP: User Profile Creation Section -->
     <top>
-        <Text text="Aamir's Game Library" BorderPane.alignment="CENTER" />
+        <VBox spacing="5.0" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <children>
+                <Text text="Aamir's Game Library" style="-fx-font-size: 20px;" />
+                <HBox spacing="10">
+                    <children>
+                        <TextField fx:id="usernameField" promptText="Enter username" />
+                        <TextField fx:id="userPlatformField" promptText="Enter platform" />
+                        <Button text="Create Profile" onAction="#handleCreateProfile" />
+                        <Label fx:id="currentUserLabel" text="No user selected" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
     </top>
 
+    <!-- CENTER: Game Table -->
     <center>
-        <TableView fx:id="gameTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="gameTableView" prefHeight="300.0">
             <columns>
-                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
-                <TableColumn fx:id="genreColumn" prefWidth="84.0" text="Genre" />
-                <TableColumn fx:id="platformColumn" prefWidth="74.0" text="Platform" />
+                <TableColumn fx:id="titleColumn" text="Title" />
+                <TableColumn fx:id="genreColumn" text="Genre" />
+                <TableColumn fx:id="platformColumn" text="Platform" />
                 <TableColumn fx:id="developerColumn" text="Developer" />
-                <TableColumn fx:id="yearColumn" prefWidth="86.0" text="Release Year" />
+                <TableColumn fx:id="yearColumn" text="Year" />
             </columns>
-            <BorderPane.margin>
+            <padding>
                 <Insets top="10.0" bottom="10.0" />
-            </BorderPane.margin>
+            </padding>
         </TableView>
     </center>
 
+    <!-- RIGHT: Game Input Fields -->
     <right>
-        <VBox spacing="5.0" alignment="TOP_LEFT" BorderPane.alignment="CENTER">
+        <VBox spacing="5.0" alignment="TOP_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
             <children>
                 <Label text="Add Game" />
                 <TextField fx:id="titleField" promptText="Title" />
                 <TextField fx:id="genreField" promptText="Genre" />
-                <TextField fx:id="platformField" promptText="Platform" />
+                <TextField fx:id="platformField" promptText="Game Platform" />
                 <TextField fx:id="developerField" promptText="Developer" />
                 <TextField fx:id="yearField" promptText="Release Year" />
                 <ChoiceBox fx:id="gameTypeChoice" prefWidth="150.0" />
@@ -43,53 +65,49 @@
                 <TextField fx:id="lossesField" promptText="Losses (MP)" />
                 <Button text="Add Game" onAction="#handleAddGame" />
             </children>
-            <padding>
-                <Insets top="10.0" right="10.0" />
-            </padding>
         </VBox>
     </right>
 
+    <!-- LEFT: Search -->
     <left>
-        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+        <VBox spacing="5.0">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
             <children>
                 <Label text="Search Library" />
-                <TextField fx:id="searchField" promptText="Search input" />
+                <TextField fx:id="searchField" promptText="Search..." />
                 <Button text="Search" />
             </children>
-            <padding>
-                <Insets left="10.0" />
-            </padding>
         </VBox>
     </left>
 
+    <!-- BOTTOM: Review + Progress Tracker -->
     <bottom>
-        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+        <VBox spacing="10.0" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
             <children>
+
+                <!-- Progress Tracker -->
                 <Label text="Progress Tracker" />
                 <TextField fx:id="progressField" promptText="Progress input (SP)" />
                 <Button fx:id="updateButton" text="Update Progress" />
+
+                <!-- Game Review Section -->
+                <Separator />
+                <Label text="Review Selected Game" />
+                <HBox spacing="10">
+                    <children>
+                        <Label text="Rating:" />
+                        <ChoiceBox fx:id="ratingChoice" prefWidth="80" />
+                    </children>
+                </HBox>
+                <TextArea fx:id="reviewArea" promptText="Write your review here..." prefRowCount="3" wrapText="true"/>
+                <Button text="Submit Review" onAction="#handleSubmitReview" />
+
             </children>
-            <padding>
-                <Insets bottom="10.0" />
-            </padding>
         </VBox>
     </bottom>
-    <bottom>
-    <VBox spacing="5.0" BorderPane.alignment="CENTER">
-        <children>
-            <Label text="Progress Tracker" />
-            <TextField fx:id="progressField" promptText="Progress input (SP)" />
-            <Button fx:id="updateButton" text="Update Progress" />
-
-            <!-- NEW: Review Section -->
-            <Label text="Rate and Review Game" />
-            <ChoiceBox fx:id="ratingChoice" prefWidth="150.0" />
-            <TextArea fx:id="reviewArea" promptText="Write your review here..." prefRowCount="3" prefWidth="400" />
-            <Button fx:id="submitReviewButton" text="Submit Review" onAction="#handleSubmitReview" />
-        </children>
-        <padding>
-            <Insets bottom="10.0" />
-        </padding>
-    </VBox>
-</bottom>
 </BorderPane>

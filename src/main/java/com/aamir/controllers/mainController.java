@@ -26,14 +26,17 @@ public class mainController {
     @FXML private TableColumn<abstractGame, String> platformColumn;
     @FXML private TableColumn<abstractGame, String> developerColumn;
     @FXML private TableColumn<abstractGame, Integer> yearColumn;
+    @FXML private TextField usernameField;
+    @FXML private TextField userPlatformField;
+    @FXML private Label currentUserLabel;
 
-    // NEW: For review system
+    // NEW: Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
     @FXML private TextArea reviewArea;
 
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
 
-    // NEW: Add a user profile
+    // The current user using the app
     private profile currentUser = new profile("Player1", "PC");
 
     @FXML
@@ -83,7 +86,7 @@ public class mainController {
 
             if (game != null) {
                 gameList.add(game);
-                currentUser.addGame(game); // Add to user's library
+                currentUser.addGame(game);
                 clearFields();
                 showAlert("Success", "Game added successfully.");
             }
@@ -112,6 +115,7 @@ public class mainController {
 
         currentUser.reviewGame(selectedGame, reviewText.trim(), rating);
         showAlert("Success", "Review submitted for: " + selectedGame.getTitle());
+
         ratingChoice.setValue(null);
         reviewArea.clear();
     }
@@ -134,5 +138,37 @@ public class mainController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleCreateProfile() {
+        String username = usernameField.getText().trim();
+        String platform = userPlatformField.getText().trim();
+
+        if (username.isEmpty() || platform.isEmpty()) {
+            showAlert("Error", "Please enter both username and platform.");
+            return;
+        }
+
+        boolean created = ProfileManager.createProfile(username, platform);
+        if (created) {
+            currentUserLabel.setText("Current user: " + username);
+            showAlert("Success", "Profile created and selected.");
+        } else {
+            showAlert("Error", "Username already exists. Try another.");
+        }
+    }
+
+    @FXML
+    private void handleSwitchProfile() {
+        String username = usernameField.getText().trim();
+
+        boolean switched = ProfileManager.selectProfile(username);
+        if (switched) {
+            currentUserLabel.setText("Current user: " + username);
+            showAlert("Success", "Switched to profile: " + username);
+        } else {
+            showAlert("Error", "Profile not found.");
+        }
     }
 }
