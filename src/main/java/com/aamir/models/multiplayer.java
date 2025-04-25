@@ -1,8 +1,10 @@
 package com.aamir.models;
 
 import com.aamir.abstractGame;
+import java.io.Serializable;
 
-public class multiplayer extends abstractGame {
+public class multiplayer extends abstractGame implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int wins = 0;
     private int losses = 0;
 

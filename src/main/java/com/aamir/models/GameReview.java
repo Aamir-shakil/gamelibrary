@@ -1,6 +1,8 @@
 package com.aamir.models;
+import java.io.Serializable;
 
-public class GameReview {
+public class GameReview implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String reviewText;
     private int rating; // Rating out of 5
 

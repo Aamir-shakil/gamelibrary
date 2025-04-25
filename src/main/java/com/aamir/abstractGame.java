@@ -1,9 +1,12 @@
 package com.aamir;
 
 import com.aamir.models.playable;
+import java.io.Serializable;
 
 // Common attributes and methods for all games in library
-public abstract class abstractGame implements playable {
+public abstract class abstractGame implements playable, Serializable {
+    private static final long serialVersionUID = 1L;
+
     protected String title;
     protected String platform;
     protected String developer;

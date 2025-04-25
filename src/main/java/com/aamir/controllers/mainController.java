@@ -29,32 +29,40 @@ public class mainController {
     @FXML private TextField usernameField;
     @FXML private TextField userPlatformField;
     @FXML private Label currentUserLabel;
+    @FXML private ChoiceBox<String> userSelectChoiceBox;
 
-    // NEW: Review system UI components
+    // Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
     @FXML private TextArea reviewArea;
 
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
 
-    // The current user using the app
-    private profile currentUser = new profile("Player1", "PC");
-
     @FXML
-    public void initialize() {
-        gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
-        ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
+public void initialize() {
+    gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
+    ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
 
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
-        developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
-        yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+    titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+    genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+    platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
+    developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
+    yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
 
-        gameTableView.setItems(gameList);
-    }
+    gameTableView.setItems(gameList);
+
+    // Load saved profiles
+    ProfileManager.loadAllProfiles();
+    userSelectChoiceBox.getItems().setAll(ProfileManager.getAllProfileNames());
+}
 
     @FXML
     private void handleAddGame() {
+        profile currentProfile = ProfileManager.getCurrentProfile();
+        if (currentProfile == null) {
+            showAlert("No Profile Selected", "Please create or switch to a profile first.");
+            return;
+        }
+
         try {
             String title = titleField.getText();
             String genre = genreField.getText();
@@ -86,7 +94,8 @@ public class mainController {
 
             if (game != null) {
                 gameList.add(game);
-                currentUser.addGame(game);
+                currentProfile.addGame(game);
+                ProfileManager.saveProfile(currentProfile);
                 clearFields();
                 showAlert("Success", "Game added successfully.");
             }
@@ -98,6 +107,12 @@ public class mainController {
 
     @FXML
     private void handleSubmitReview() {
+        profile currentProfile = ProfileManager.getCurrentProfile();
+        if (currentProfile == null) {
+            showAlert("No Profile Selected", "Please select a profile first.");
+            return;
+        }
+
         abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
 
         if (selectedGame == null) {
@@ -113,11 +128,62 @@ public class mainController {
             return;
         }
 
-        currentUser.reviewGame(selectedGame, reviewText.trim(), rating);
+        currentProfile.reviewGame(selectedGame, reviewText.trim(), rating);
+        ProfileManager.saveProfile(currentProfile);
         showAlert("Success", "Review submitted for: " + selectedGame.getTitle());
 
         ratingChoice.setValue(null);
         reviewArea.clear();
+    }
+
+    @FXML
+    private void handleCreateProfile() {
+        String username = usernameField.getText().trim();
+        String platform = userPlatformField.getText().trim();
+    
+        if (username.isEmpty() || platform.isEmpty()) {
+            showAlert("Error", "Please enter both username and platform.");
+            return;
+        }
+    
+        boolean created = ProfileManager.createProfile(username, platform);
+        if (created) {
+            profile currentProfile = ProfileManager.getCurrentProfile();
+            currentUserLabel.setText("Current user: " + username);
+            gameList.setAll(currentProfile.getGames());
+            userSelectChoiceBox.getItems().add(username); // <== Update dropdown
+            showAlert("Success", "Profile created and selected.");
+        } else {
+            showAlert("Error", "Username already exists. Try another.");
+        }
+    }
+    @FXML
+private void handleSwitchToSelectedUser() {
+    String selectedUsername = userSelectChoiceBox.getValue();
+
+    if (selectedUsername != null && ProfileManager.selectProfile(selectedUsername)) {
+        profile currentProfile = ProfileManager.getCurrentProfile();
+        currentUserLabel.setText("Current user: " + selectedUsername);
+        gameList.setAll(currentProfile.getGames());
+        showAlert("Profile Loaded", "Welcome back, " + selectedUsername + "!");
+    } else {
+        showAlert("Error", "Profile not found.");
+    }
+}
+
+    @FXML
+    private void handleSwitchProfile() {
+        String username = usernameField.getText().trim();
+
+        boolean switched = ProfileManager.selectProfile(username);
+        if (switched) {
+            profile currentProfile = ProfileManager.getCurrentProfile();
+            currentUserLabel.setText("Current user: " + username);
+            gameList.setAll(currentProfile.getGames());
+            showAlert("Success", "Switched to profile: " + username);
+        } else {
+            showAlert("Error", "Profile not found.");
+        }
     }
 
     private void clearFields() {
@@ -138,37 +204,5 @@ public class mainController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    @FXML
-    private void handleCreateProfile() {
-        String username = usernameField.getText().trim();
-        String platform = userPlatformField.getText().trim();
-
-        if (username.isEmpty() || platform.isEmpty()) {
-            showAlert("Error", "Please enter both username and platform.");
-            return;
-        }
-
-        boolean created = ProfileManager.createProfile(username, platform);
-        if (created) {
-            currentUserLabel.setText("Current user: " + username);
-            showAlert("Success", "Profile created and selected.");
-        } else {
-            showAlert("Error", "Username already exists. Try another.");
-        }
-    }
-
-    @FXML
-    private void handleSwitchProfile() {
-        String username = usernameField.getText().trim();
-
-        boolean switched = ProfileManager.selectProfile(username);
-        if (switched) {
-            currentUserLabel.setText("Current user: " + username);
-            showAlert("Success", "Switched to profile: " + username);
-        } else {
-            showAlert("Error", "Profile not found.");
-        }
     }
 }

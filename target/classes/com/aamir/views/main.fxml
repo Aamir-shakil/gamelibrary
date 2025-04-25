@@ -12,24 +12,28 @@
 
     <!-- TOP: User Profile Creation Section -->
     <top>
-        <VBox spacing="5.0" alignment="TOP_CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <children>
-                <Text text="Aamir's Game Library" style="-fx-font-size: 20px;" />
-                <HBox spacing="10">
-                    <children>
-                        <TextField fx:id="usernameField" promptText="Enter username" />
-                        <TextField fx:id="userPlatformField" promptText="Enter platform" />
-                        <Button text="Create Profile" onAction="#handleCreateProfile" />
-                        <Label fx:id="currentUserLabel" text="No user selected" />
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-    </top>
+    <VBox spacing="5.0" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <children>
+            <Text text="Aamir's Game Library" style="-fx-font-size: 20px;" />
+            <HBox spacing="10">
+                <children>
+                    <!-- New: User selector and switch button -->
+                    <ChoiceBox fx:id="userSelectChoiceBox" prefWidth="200" />
+                    <Button text="Switch to Selected User" onAction="#handleSwitchToSelectedUser" />
 
+                    <!-- Existing: Create profile inputs -->
+                    <TextField fx:id="usernameField" promptText="Enter username" />
+                    <TextField fx:id="userPlatformField" promptText="Enter platform" />
+                    <Button text="Create Profile" onAction="#handleCreateProfile" />
+                    <Label fx:id="currentUserLabel" text="No user selected" />
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+</top>
     <!-- CENTER: Game Table -->
     <center>
         <TableView fx:id="gameTableView" prefHeight="300.0">
