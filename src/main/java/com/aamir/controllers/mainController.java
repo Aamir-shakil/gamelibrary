@@ -6,7 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aamir.abstractGame;
+import com.aamir.models.GameReview;
 import com.aamir.models.*;
 
 public class mainController {
@@ -30,6 +34,9 @@ public class mainController {
     @FXML private TextField userPlatformField;
     @FXML private Label currentUserLabel;
     @FXML private ChoiceBox<String> userSelectChoiceBox;
+    @FXML private ChoiceBox<String> searchFilterChoiceBox;
+    @FXML private TextField searchField;
+    @FXML private TextArea myReviewArea;
 
     // Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
@@ -38,22 +45,30 @@ public class mainController {
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
 
     @FXML
-public void initialize() {
-    gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
-    ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
+    public void initialize() {
+        gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
+        ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
+        
+        searchFilterChoiceBox.setItems(FXCollections.observableArrayList("Title", "Genre", "Developer"));
+        searchFilterChoiceBox.setValue("Title"); //default value
 
-    titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-    genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-    platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
-    developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
-    yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
+        developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
 
-    gameTableView.setItems(gameList);
 
-    // Load saved profiles
-    ProfileManager.loadAllProfiles();
-    userSelectChoiceBox.getItems().setAll(ProfileManager.getAllProfileNames());
-}
+        gameTableView.setItems(gameList);
+
+        gameTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            updateMyReviewDisplay(newSelection);
+        });
+
+        // Load saved profiles
+        ProfileManager.loadAllProfiles();
+        userSelectChoiceBox.getItems().setAll(ProfileManager.getAllProfileNames());
+    }
 
     @FXML
     private void handleAddGame() {
@@ -169,18 +184,18 @@ public void initialize() {
         }
     }
     @FXML
-private void handleSwitchToSelectedUser() {
-    String selectedUsername = userSelectChoiceBox.getValue();
+    private void handleSwitchToSelectedUser() {
+        String selectedUsername = userSelectChoiceBox.getValue();
 
-    if (selectedUsername != null && ProfileManager.selectProfile(selectedUsername)) {
-        profile currentProfile = ProfileManager.getCurrentProfile();
-        currentUserLabel.setText("Current user: " + selectedUsername);
-        gameList.setAll(currentProfile.getGames());
-        showAlert("Profile Loaded", "Welcome back, " + selectedUsername + "!");
-    } else {
-        showAlert("Error", "Profile not found.");
+        if (selectedUsername != null && ProfileManager.selectProfile(selectedUsername)) {
+            profile currentProfile = ProfileManager.getCurrentProfile();
+            currentUserLabel.setText("Current user: " + selectedUsername);
+            gameList.setAll(currentProfile.getGames());
+            showAlert("Profile Loaded", "Welcome back, " + selectedUsername + "!");
+        } else {
+            showAlert("Error", "Profile not found.");
+        }
     }
-}
 
     @FXML
     private void handleSwitchProfile() {
@@ -216,4 +231,57 @@ private void handleSwitchToSelectedUser() {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    @FXML
+    private void handleSearch() {
+        profile currentProfile = ProfileManager.getCurrentProfile();
+        if (currentProfile == null) {
+            showAlert("No Profile Selected", "Please create or switch to a profile first.");
+            return;
+        }
+
+        String keyword = searchField.getText().trim().toLowerCase();
+        String filter = searchFilterChoiceBox.getValue();
+
+        if (keyword.isEmpty() || filter == null) {
+            showAlert("Search Error", "Please enter a keyword and select a filter.");
+            return;
+        }
+
+        List<abstractGame> allGames = currentProfile.getGames();
+        List<abstractGame> filteredGames = new ArrayList<>();
+
+        for (abstractGame game : allGames) {
+            switch (filter) {
+                case "Title":
+                    if (game.getTitle().toLowerCase().contains(keyword)) {
+                        filteredGames.add(game);
+                    }
+                    break;
+                case "Developer":
+                    if (game.getDeveloper().toLowerCase().contains(keyword)) {
+                        filteredGames.add(game);
+                    }
+                    break;
+                case "Genre":
+                    if (game.getGenre().toLowerCase().contains(keyword)) {
+                        filteredGames.add(game);
+                    }
+                    break;
+            }
+        }
+
+        gameList.setAll(filteredGames);
+    }
+    private void updateMyReviewDisplay(abstractGame game) {
+        profile currentProfile = ProfileManager.getCurrentProfile();
+        if (currentProfile != null && game != null) {
+            GameReview review = currentProfile.getReviewForGame(game);
+            if (review != null) {
+                myReviewArea.setText(review.toString());
+            } else {
+                myReviewArea.clear();
+            }
+        }
+    }
+
 }

@@ -75,15 +75,16 @@
     <!-- LEFT: Search -->
     <left>
         <VBox spacing="5.0">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <children>
-                <Label text="Search Library" />
-                <TextField fx:id="searchField" promptText="Search..." />
-                <Button text="Search" />
-            </children>
-        </VBox>
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <children>
+        <Label text="Search Library" />
+        <ChoiceBox fx:id="searchFilterChoiceBox" prefWidth="200.0"/>
+        <TextField fx:id="searchField" promptText="Search..." />
+        <Button text="Search" onAction="#handleSearch" />
+    </children>
+</VBox>
     </left>
 
     <!-- BOTTOM: Review + Progress Tracker -->
@@ -101,6 +102,9 @@
 
                 <!-- Game Review Section -->
                 <Separator />
+                <Label text="My Review:" />
+                <TextArea fx:id="myReviewArea" editable="false" wrapText="true" prefRowCount="3" />
+
                 <Label text="Review Selected Game" />
                 <HBox spacing="10">
                     <children>
