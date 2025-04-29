@@ -96,10 +96,17 @@
             <children>
 
                 <!-- Progress Tracker -->
-                <Label text="Progress Tracker" />
-                <TextField fx:id="progressUpdateField" promptText="Progress input (SP)" />
-                <Button fx:id="updateButton" text="Update Progress" />
+               <Label text="Progress Tracker" />
 
+                <TextField fx:id="progressUpdateField" promptText="Progress input (SP)" />
+
+                <HBox spacing="10">
+                    <Button fx:id="updateButton" text="Update Progress" onAction="#handleUpdateProgress" />
+                    <Button fx:id="viewProgressButton" text="View Progress" onAction="#handleViewProgress" />
+                </HBox>
+
+                <Label fx:id="gameProgressLabel" text="Progress: (Select a game to view progress)" />
+                
                 <!-- Game Review Section -->
                 <Separator />
                 <Label text="My Review:" />

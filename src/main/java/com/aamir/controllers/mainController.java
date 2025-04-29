@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aamir.abstractGame;
-import com.aamir.models.GameReview;
 import com.aamir.models.*;
 
 public class mainController {
@@ -37,6 +36,9 @@ public class mainController {
     @FXML private ChoiceBox<String> searchFilterChoiceBox;
     @FXML private TextField searchField;
     @FXML private TextArea myReviewArea;
+    @FXML private Button viewProgressButton;
+    @FXML private Label gameProgressLabel;
+    @FXML private Label progressViewLabel;
 
     // Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
@@ -128,6 +130,25 @@ public class mainController {
 
         } catch (NumberFormatException e) {
             showAlert("Invalid Input", "Please enter valid numbers in numeric fields.");
+        }
+    }
+    @FXML
+    private void handleViewProgress() {
+        abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedGame == null) {
+            gameProgressLabel.setText("Progress: Please select a game.");
+            return;
+        }
+
+        if (selectedGame instanceof singlePlayer) {
+            singlePlayer spGame = (singlePlayer) selectedGame;
+            gameProgressLabel.setText("Progress: " + spGame.getStoryCompleted() + "% completed.");
+        } else if (selectedGame instanceof multiplayer) {
+            multiplayer mpGame = (multiplayer) selectedGame;
+            gameProgressLabel.setText("Wins: " + mpGame.getWins() + " | Losses: " + mpGame.getLosses());
+        } else {
+            gameProgressLabel.setText("Progress info unavailable.");
         }
     }
 
@@ -231,6 +252,12 @@ public class mainController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    @FXML
+    private void handleUpdateProgress() {
+        System.out.println("Update Progress clicked");
+    }
+
+
     @FXML
     private void handleSearch() {
         profile currentProfile = ProfileManager.getCurrentProfile();
