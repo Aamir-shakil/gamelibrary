@@ -96,7 +96,7 @@
 
                 <!-- Progress Tracker -->
                 <Label text="Progress Tracker" />
-                <TextField fx:id="progressField" promptText="Progress input (SP)" />
+                <TextField fx:id="progressUpdateField" promptText="Progress input (SP)" />
                 <Button fx:id="updateButton" text="Update Progress" />
 
                 <!-- Game Review Section -->

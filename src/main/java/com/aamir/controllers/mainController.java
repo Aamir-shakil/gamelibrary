@@ -63,30 +63,41 @@ public void initialize() {
             return;
         }
 
+        String title = titleField.getText();
+        String genre = genreField.getText();
+        String platform = platformField.getText();
+        String developer = developerField.getText();
+        String yearText = yearField.getText();
+        String type = gameTypeChoice.getValue();
+
+        if (title.isEmpty() || genre.isEmpty() || platform.isEmpty() || developer.isEmpty() || yearText.isEmpty() || type == null) {
+            showAlert("Input Error", "Please check all fields and try again.");
+            return;
+        }
+
         try {
-            String title = titleField.getText();
-            String genre = genreField.getText();
-            String platform = platformField.getText();
-            String developer = developerField.getText();
-            String yearText = yearField.getText();
-            String type = gameTypeChoice.getValue();
-
-            if (title.isEmpty() || genre.isEmpty() || platform.isEmpty() || developer.isEmpty() || yearText.isEmpty() || type == null) {
-                showAlert("Input Error", "Please check all fields and try again.");
-                return;
-            }
-
             int year = Integer.parseInt(yearText);
             abstractGame game = null;
 
             if (type.equals("SinglePlayer")) {
-                int progress = Integer.parseInt(progressField.getText());
+                String progressText = progressField.getText();
+                if (progressText == null || progressText.trim().isEmpty()) {
+                    showAlert("Input Error", "Please enter progress for SinglePlayer.");
+                    return;
+                }
+                int progress = Integer.parseInt(progressText);
                 singlePlayer spGame = new singlePlayer(title, genre, platform, year, developer);
                 spGame.updateProgress(progress);
                 game = spGame;
             } else if (type.equals("Multiplayer")) {
-                int wins = Integer.parseInt(winsField.getText());
-                int losses = Integer.parseInt(lossesField.getText());
+                String winsText = winsField.getText();
+                String lossesText = lossesField.getText();
+                if (winsText == null || lossesText == null || winsText.trim().isEmpty() || lossesText.trim().isEmpty()) {
+                    showAlert("Input Error", "Please enter wins and losses for Multiplayer.");
+                    return;
+                }
+                int wins = Integer.parseInt(winsText);
+                int losses = Integer.parseInt(lossesText);
                 multiplayer mpGame = new multiplayer(title, genre, platform, year, developer);
                 mpGame.updateProgress(wins, losses);
                 game = mpGame;
