@@ -64,7 +64,7 @@ public class mainController {
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
         developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        typeColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getType()));
 
 
 
