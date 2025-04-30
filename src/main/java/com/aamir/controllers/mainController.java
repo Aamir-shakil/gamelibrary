@@ -39,6 +39,9 @@ public class mainController {
     @FXML private Button viewProgressButton;
     @FXML private Label gameProgressLabel;
     @FXML private Label progressViewLabel;
+    @FXML private TextField progressUpdateField;
+    @FXML private TextField winsUpdateField;
+    @FXML private TextField lossesUpdateField;
 
     // Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
@@ -254,7 +257,49 @@ public class mainController {
     }
     @FXML
     private void handleUpdateProgress() {
-        System.out.println("Update Progress clicked");
+        abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
+        profile currentProfile = ProfileManager.getCurrentProfile();
+
+        if (currentProfile == null || selectedGame == null) {
+            showAlert("Update Error", "Please select a game and make sure a profile is loaded.");
+            return;
+        }
+
+        try {
+            if (selectedGame instanceof singlePlayer) {
+                String progressText = progressUpdateField.getText().trim();
+                if (progressText.isEmpty()) {
+                    showAlert("Input Error", "Please enter progress for SinglePlayer game.");
+                    return;
+                }
+                int progress = Integer.parseInt(progressText);
+                ((singlePlayer) selectedGame).updateProgress(progress);
+                gameProgressLabel.setText("Progress: " + progress + "% completed.");
+
+            } else if (selectedGame instanceof multiplayer) {
+                String winsText = winsUpdateField.getText().trim();
+                String lossesText = lossesUpdateField.getText().trim();
+                if (winsText.isEmpty() || lossesText.isEmpty()) {
+                    showAlert("Input Error", "Please enter both wins and losses for Multiplayer game.");
+                    return;
+                }
+                int wins = Integer.parseInt(winsText);
+                int losses = Integer.parseInt(lossesText);
+                ((multiplayer) selectedGame).updateProgress(wins, losses);
+                gameProgressLabel.setText("Wins: " + wins + " | Losses: " + losses);
+            }
+
+            ProfileManager.saveProfile(currentProfile);
+            showAlert("Success", "Progress updated successfully!");
+
+            // Optionally clear the fields
+            progressUpdateField.clear();
+            winsUpdateField.clear();
+            lossesUpdateField.clear();
+
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Input", "Please enter valid numeric values.");
+        }
     }
 
 

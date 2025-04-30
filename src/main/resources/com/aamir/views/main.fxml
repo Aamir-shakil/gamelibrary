@@ -8,7 +8,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.aamir.controllers.mainController"
-            prefHeight="600.0" prefWidth="800.0">
+            prefHeight="1000.0" prefWidth="1000.0">
 
     <!-- TOP: User Profile Creation Section -->
     <top>
@@ -43,6 +43,7 @@
                 <TableColumn fx:id="platformColumn" text="Platform" />
                 <TableColumn fx:id="developerColumn" text="Developer" />
                 <TableColumn fx:id="yearColumn" text="Year" />
+                <TableColumn fx:id="typeColumn" text="Type" />
             </columns>
             <padding>
                 <Insets top="10.0" bottom="10.0" />
@@ -98,7 +99,14 @@
                 <!-- Progress Tracker -->
                <Label text="Progress Tracker" />
 
+               <Label text="Update SinglePlayer Progress:" />
                 <TextField fx:id="progressUpdateField" promptText="Progress input (SP)" />
+
+                <Label text="Update Multiplayer Progress:" />
+                <HBox spacing="10">
+                    <TextField fx:id="winsUpdateField" promptText="Wins" />
+                    <TextField fx:id="lossesUpdateField" promptText="Losses" />
+                </HBox>
 
                 <HBox spacing="10">
                     <Button fx:id="updateButton" text="Update Progress" onAction="#handleUpdateProgress" />
