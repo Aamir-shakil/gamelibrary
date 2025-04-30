@@ -29,4 +29,9 @@ public class singlePlayer extends abstractGame implements Serializable {
     public int getStoryCompleted() {
         return storyCompleted;
     }
+
+    @Override
+    public String getType() {
+        return "SinglePlayer";
+}
 }

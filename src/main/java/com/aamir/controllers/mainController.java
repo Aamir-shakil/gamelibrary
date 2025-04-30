@@ -1,5 +1,6 @@
 package com.aamir.controllers;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,6 +43,7 @@ public class mainController {
     @FXML private TextField progressUpdateField;
     @FXML private TextField winsUpdateField;
     @FXML private TextField lossesUpdateField;
+    @FXML private TableColumn<abstractGame, String> typeColumn;
 
     // Review system UI components
     @FXML private ChoiceBox<Integer> ratingChoice;
@@ -62,6 +64,8 @@ public class mainController {
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
         developerColumn.setCellValueFactory(new PropertyValueFactory<>("developer"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
 
 
         gameTableView.setItems(gameList);

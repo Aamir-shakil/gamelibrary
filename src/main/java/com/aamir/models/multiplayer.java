@@ -30,4 +30,8 @@ public class multiplayer extends abstractGame implements Serializable{
     public int getLosses() {
         return losses;
     }
+    @Override
+    public String getType() {
+        return "Multiplayer";
+}
 }

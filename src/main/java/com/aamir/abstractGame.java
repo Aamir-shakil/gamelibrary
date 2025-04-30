@@ -41,6 +41,10 @@ public abstract class abstractGame implements playable, Serializable {
     public int getReleaseYear() {
         return releaseYear;
     }
+    
+    public String getType() {
+        return "Unknown";
+    }
 
     public abstract void updateProgress();
 }
