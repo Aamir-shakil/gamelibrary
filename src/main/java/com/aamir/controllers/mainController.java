@@ -12,9 +12,12 @@ import java.util.List;
 
 import com.aamir.abstractGame;
 import com.aamir.models.*;
-
+/* Controller for the main UI of the Game Library Manager application.
+ * This controller manages user interactions for adding, updating, reviewing,
+ * and filtering games, as well as managing user profiles.
+*/
 public class mainController {
-
+    // FXML-bound UI components for game and user input
     @FXML private TextField titleField;
     @FXML private TextField genreField;
     @FXML private TextField platformField;
@@ -49,16 +52,19 @@ public class mainController {
     @FXML private ChoiceBox<Integer> ratingChoice;
     @FXML private TextArea reviewArea;
 
+    // List to hold the games displayed in the table
     private ObservableList<abstractGame> gameList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Initialize the game type and rating choice boxes
         gameTypeChoice.getItems().addAll("SinglePlayer", "Multiplayer");
         ratingChoice.getItems().addAll(1, 2, 3, 4, 5);
         
         searchFilterChoiceBox.setItems(FXCollections.observableArrayList("Title", "Genre", "Developer"));
         searchFilterChoiceBox.setValue("Title"); //default value
 
+        //setting up table columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
@@ -67,7 +73,7 @@ public class mainController {
         typeColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getType()));
 
 
-
+        //Update review display on selection change 
         gameTableView.setItems(gameList);
 
         gameTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -79,6 +85,7 @@ public class mainController {
         userSelectChoiceBox.getItems().setAll(ProfileManager.getAllProfileNames());
     }
 
+    //Adds a new game to the currently active profile.
     @FXML
     private void handleAddGame() {
         profile currentProfile = ProfileManager.getCurrentProfile();
@@ -139,6 +146,8 @@ public class mainController {
             showAlert("Invalid Input", "Please enter valid numbers in numeric fields.");
         }
     }
+
+    //Displays game progress for singleplayer and multiplayer games 
     @FXML
     private void handleViewProgress() {
         abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
@@ -159,6 +168,7 @@ public class mainController {
         }
     }
 
+    //Submits a review for the selected game by the current user.
     @FXML
     private void handleSubmitReview() {
         profile currentProfile = ProfileManager.getCurrentProfile();
@@ -190,6 +200,7 @@ public class mainController {
         reviewArea.clear();
     }
 
+    //Creates a new user profile and selects it as the current profile.
     @FXML
     private void handleCreateProfile() {
         String username = usernameField.getText().trim();
@@ -211,6 +222,8 @@ public class mainController {
             showAlert("Error", "Username already exists. Try another.");
         }
     }
+
+    //Switches the view to the selected user profile from the dropdown.
     @FXML
     private void handleSwitchToSelectedUser() {
         String selectedUsername = userSelectChoiceBox.getValue();
@@ -225,6 +238,7 @@ public class mainController {
         }
     }
 
+    // Switches to the profile with the username entered in the text field.
     @FXML
     private void handleSwitchProfile() {
         String username = usernameField.getText().trim();
@@ -259,6 +273,8 @@ public class mainController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    //Updates the progress of the selected game based on its type.
     @FXML
     private void handleUpdateProgress() {
         abstractGame selectedGame = gameTableView.getSelectionModel().getSelectedItem();
@@ -306,7 +322,7 @@ public class mainController {
         }
     }
 
-
+    //Searches for games based on the selected filter and keyword.(title, genre, developer)
     @FXML
     private void handleSearch() {
         profile currentProfile = ProfileManager.getCurrentProfile();
@@ -348,6 +364,9 @@ public class mainController {
 
         gameList.setAll(filteredGames);
     }
+
+    //Updates the review area with the selected game's review (if available).
+    
     private void updateMyReviewDisplay(abstractGame game) {
         profile currentProfile = ProfileManager.getCurrentProfile();
         if (currentProfile != null && game != null) {

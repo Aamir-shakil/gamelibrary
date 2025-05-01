@@ -21,11 +21,11 @@ public abstract class abstractGame implements playable, Serializable {
         this.releaseYear = releaseYear;
         this.developer = developer;
     }
-
+    //returns title
     public String getTitle() {
         return title;
     }
-
+    //returns genre 
     public String getGenre() {
         return genre;
     }
@@ -41,10 +41,10 @@ public abstract class abstractGame implements playable, Serializable {
     public int getReleaseYear() {
         return releaseYear;
     }
-    
+    //Returns type of game, is implemented by subclasses singleplayer and multiplayer to be overridden
     public String getType() {
         return "Unknown";
     }
-
+    //Abstract method for updating game progress.
     public abstract void updateProgress();
 }

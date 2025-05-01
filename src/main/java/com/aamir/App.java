@@ -10,9 +10,12 @@ import java.io.IOException;
 
 /**
  * JavaFX App
+ * main entry point
+ * This class loads the main FXML layout and launches the primary window (Stage).
  */
 public class App extends Application {
 
+    // Static reference to the main scene, allowing root changes from anywhere
     private static Scene scene;
 
     @Override

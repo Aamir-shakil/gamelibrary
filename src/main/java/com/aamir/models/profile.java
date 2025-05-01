@@ -4,6 +4,12 @@ import com.aamir.abstractGame;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Represents a user profile containing personal gaming information.
+ * Stores the user's username, platform, game library, and associated reviews.
+ * Implements {@link Serializable} to allow saving and loading profile data.
+ */
+
 public class profile implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +24,7 @@ public class profile implements Serializable {
         this.games = new ArrayList<>();
     }
 
+    //Fucntions Returning username, platform, games and reviews.
     @Override
     public String toString() {
         return username;
@@ -39,6 +46,7 @@ public class profile implements Serializable {
         return games;
     }
 
+    //Returns the list of games in the user's library.
     public List<abstractGame> searchGame(String keyword) {
         List<abstractGame> result = new ArrayList<>();
         for (abstractGame game : games) {
@@ -49,11 +57,13 @@ public class profile implements Serializable {
         return result;
     }
 
+    //Adds or updates a review for a specific game.
     public void reviewGame(abstractGame game, String reviewText, int rating) {
         GameReview review = new GameReview(reviewText, rating);
         reviews.put(game, review);
     }
 
+    //Retrieves the review for a specific game, if it exists.
     public GameReview getReviewForGame(abstractGame game) {
         return reviews.get(game);
     }

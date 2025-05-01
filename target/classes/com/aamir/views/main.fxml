@@ -5,12 +5,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
+<!--
+    Main layout for Aamir's Game Library application.
+    Uses BorderPane to organize the UI into top, bottom, left, right, and center sections.
+    The controller class handling UI events is: com.aamir.controllers.mainController
+-->
+
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.aamir.controllers.mainController"
             prefHeight="1000.0" prefWidth="1000.0">
 
-    <!-- TOP: User Profile Creation Section -->
+    <!-- TOP: User Profile Creation Section
+    Allows profile creation and user switching -->
     <top>
     <VBox spacing="5.0" alignment="TOP_CENTER">
         <padding>

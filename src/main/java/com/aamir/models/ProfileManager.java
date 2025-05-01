@@ -3,12 +3,21 @@ package com.aamir.models;
 import java.io.*;
 import java.util.*;
 
+/*
+ * Manages user profiles including creation, selection, saving, and loading.
+ * Profiles are serialized and stored on disk for persistence between sessions.
+ */
+
 public class ProfileManager {
 
     private static final String SAVE_FOLDER = "profiles/";
     private static Map<String, profile> profiles = new HashMap<>();
     private static profile currentUser = null;
 
+    /*
+     * Creates a new profile with the given username and platform.
+     * Automatically selects and saves the new profile.
+     */
     public static boolean createProfile(String username, String platform) {
         if (profiles.containsKey(username)) return false;
 
@@ -19,6 +28,7 @@ public class ProfileManager {
         return true;
     }
 
+    //Selects an existing profile by username.
     public static boolean selectProfile(String username) {
         if (!profiles.containsKey(username)) return false;
         currentUser = profiles.get(username);
@@ -33,6 +43,7 @@ public class ProfileManager {
         return currentUser;
     }
 
+    //Saves a profile to disk using Java serialization.
     public static void saveProfile(profile p) {
         try {
             File dir = new File(SAVE_FOLDER);
@@ -47,6 +58,10 @@ public class ProfileManager {
         }
     }
 
+    /*
+     * Loads all serialized profiles from the profiles directory into memory.
+     * Automatically adds each loaded profile to the profiles map.
+     */
     public static void loadAllProfiles() {
         File dir = new File(SAVE_FOLDER);
         if (!dir.exists()) dir.mkdirs();
@@ -66,6 +81,7 @@ public class ProfileManager {
         }
     }
 
+    // Retrieves the set of all profile usernames that are currently loaded.
     public static Set<String> getAllProfileNames() {
         return profiles.keySet();
     }
